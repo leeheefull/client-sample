@@ -1,5 +1,6 @@
 package com.leeheefull.client.sample.weather.client
 
+import com.leeheefull.client.sample.weather.dto.WeatherRequest
 import com.leeheefull.client.sample.weather.dto.WeatherResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -15,16 +16,17 @@ class WeatherClient(
     @Value("\${client.weather.host}")
     private val uriHost: String,
 ) {
-    fun getWeatherData(): WeatherResponse {
+
+    fun getWeatherData(weatherRequest: WeatherRequest): WeatherResponse {
         return webClient.get()
             .uri { uriBuilder ->
                 uriBuilder
                     .scheme(uriScheme)
                     .host(uriHost)
                     .path("/v1/forecast")
-                    .queryParam("latitude", "37.5665")
-                    .queryParam("longitude", "126.9780")
-                    .queryParam("hourly", "temperature_2m")
+                    .queryParam("latitude", weatherRequest.latitude)
+                    .queryParam("longitude", weatherRequest.longitude)
+                    .queryParam("hourly", weatherRequest.hourly)
                     .build()
             }
             .retrieve()
