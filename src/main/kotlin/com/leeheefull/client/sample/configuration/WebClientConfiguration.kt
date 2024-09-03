@@ -35,16 +35,16 @@ class WebClientConfiguration(
     fun webClient(): WebClient {
         // Connection provider 설정
         val connectionProvider = ConnectionProvider.builder("customConnectionProvider")
-            .maxConnections(maxConnections)    // 커넥션 풀 최대 연결 수(default : 무제한)
-            .pendingAcquireTimeout(Duration.ofSeconds(pendingAcquireTimeoutSeconds))  // 커넥션을 얻기 위해 대기하는 최대 시간(default : 45s)
+            .maxConnections(maxConnections)
+            .pendingAcquireTimeout(Duration.ofSeconds(pendingAcquireTimeoutSeconds))
             .build()
 
         // HttpClient 설정
         val httpClient = HttpClient.create(connectionProvider)
-            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeoutMillis)    // 커넥션 타임아웃 시간(default : 30000ms)
+            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeoutMillis)
             .doOnConnected { connection ->
-                connection.addHandlerLast(ReadTimeoutHandler(readTimeoutSeconds))   // 읽기 타임아웃 시간(default : 무제한)
-                connection.addHandlerLast(WriteTimeoutHandler(writeTimeoutSeconds))  // 쓰기 타임아웃 시간(default : 무제한)
+                connection.addHandlerLast(ReadTimeoutHandler(readTimeoutSeconds))
+                connection.addHandlerLast(WriteTimeoutHandler(writeTimeoutSeconds))
             }
 
         // WebClient 설정
